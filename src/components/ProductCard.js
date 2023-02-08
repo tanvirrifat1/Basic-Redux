@@ -9,13 +9,14 @@ import { useLocation } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
-  const { pathName } = useLocation()
+  const { pathname } = useLocation()
 
   return (
     <div
-      className='shadow-lg rounded-3xl border  p-3 flex flex-col text-indigo-900'
+      className='shadow-lg relative rounded-3xl border  p-3 flex flex-col text-indigo-900'
       key={product._id}
     >
+      {pathname.includes('cart') && <div className="bg-indigo-500 gird place-content-center h-8 w-8 text-white p-1 rounded-full absolute top-0 right-0"><p className="ml-2">{product.quantity}</p></div>}
       <div className='h-52 w-52 mx-auto'>
         <img src={product.image} alt={product.model} />
       </div>
@@ -30,25 +31,25 @@ const ProductCard = ({ product }) => {
       </div>
       <div className='flex gap-2 mt-5'>
 
-        {<button
+        {pathname.includes('cart') && <button
           onClick={() => dispatch(removeFromCart(product))}
-          className='text-red-500 text-2xl font-bold'>
-          <AiFillDelete />
+          className='px-8 py-3 font-semibold rounded-full dark:bg-gray-100 text-red-500'>
+          <AiFillDelete className="text-2xl" />
         </button>}
+        {!pathname.includes('cart') &&
+          <button
+            onClick={() => dispatch(addToCart(product))}
+            className='bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold'>
+            Add to cart
+          </button>}
 
-        <button
-          onClick={() => dispatch(addToCart(product))}
-          className='bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold'>
-          Add to cart
-        </button>
 
-
-        <button
+        {!pathname.includes('cart') && <button
           title='Add to wishlist'
           className='bg-indigo-500  py-1 px-2 rounded-full'
         >
           <BiListPlus className='text-white' />
-        </button>
+        </button>}
 
       </div>
     </div >
